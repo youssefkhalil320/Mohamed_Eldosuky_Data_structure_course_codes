@@ -87,6 +87,115 @@ public:
             cout<<r->data<<"\t";        
         }
     }
+
+    Node* Search(Node* r, int key)
+    {
+        if (r == NULL)
+        {
+            return NULL;
+        }
+
+        else if (r->data == key)
+        {
+            return r;
+        }
+
+        else if(r->data > key)
+        {
+            Search(r->left, key);
+        }
+
+        else 
+        {
+            Search(r->right, key);  
+        }
+    } 
+
+    bool Search(int key)
+    {
+        Node* result = Search(root, key);
+        if(result == NULL)
+        {
+            return false;
+        }
+        else 
+        {
+            return true;
+        }
+    }
+
+    Node* Findmin(Node* r)
+    {
+        if (r == NULL)
+        {
+            return NULL;
+        }
+        else if(r-> left == NULL)
+        {
+            return r;
+        }
+        else
+        {
+            return Findmin(r->left);
+        }
+    }
+
+    Node* Findmax(Node* r)
+    {
+        if (r == NULL)
+        {
+            return NULL;
+        }
+        else if(r-> right == NULL)
+        {
+            return r;
+        }
+        else
+        {
+            return Findmin(r->right);
+        }
+    }
+
+    Node* Delete(Node* r,int key)
+    {
+        if(r == NULL)
+        {
+            return NULL;
+        }
+        else if (key < r->data)
+        {
+            r->left = Delete(r->left, key);
+        }
+        else if (key > r->data)
+        {
+            r->right = Delete(r->right, key);
+        }
+        else
+        {
+            if (r->left == NULL && r->right == NULL) // leaf node
+				r = NULL;
+			else if (r->left != NULL && r->right == NULL) // one child on the left
+			{
+				r->data = r->left->data;
+				delete r->left;
+				r->left = NULL;
+			}
+			else if (r->left == NULL && r->right != NULL) // one child on the right
+			{
+				r->data = r->right->data;
+				delete r->right;
+				r->right = NULL;
+			}
+			else
+			{
+				Node* max = Findmax(r->left);
+				r->data = max->data;
+			   r->left=	Delete(r->left, max->data);
+				
+			}
+        }
+    return r;  
+    }
 };
 
 int main()
@@ -102,4 +211,8 @@ int main()
     my_tree.inorder(my_tree.root);
     cout<<"..................................."<<endl;
     my_tree.postorder(my_tree.root);
+    int my_key;
+    cout<<"Enter the key"<<endl;
+    cin>>my_key;
+    cout<<my_tree.Search(my_key);
 }
